@@ -1,5 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PageInterface, PhotoInterface } from "./page.interface";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PageEntity } from "./entity/page.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class PageService {
@@ -51,6 +54,22 @@ export class PageService {
             content: "This is the contact page"
         }
     ];
+
+    constructor(
+        @InjectRepository(PageEntity) private readonly pageRepository: Repository<PageEntity>
+    ) { }
+
+    public async findAllPages(): Promise<PageEntity[]> {
+        return await this.pageRepository.find();
+    }
+
+    public async findPageById(id: number): Promise<PageEntity> {
+        return await this.pageRepository.findOne({
+            where: {
+                id: id
+            }
+        });
+    }
 
     public getAllPages(): any {
         return this.pages;

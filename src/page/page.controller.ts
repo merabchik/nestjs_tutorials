@@ -7,12 +7,12 @@ export class PageController {
 
     @Get()
     getAllPages(): any {
-        return this.service.getAllPages();
+        return this.service.findAllPages();
     }
 
     @Get(':id')
     getOnePage(@Param('id') id: string): any {
-        const result = this.service.getPage(+id);
+        const result = this.service.findPageById(+id);
         return result;
     }
 
