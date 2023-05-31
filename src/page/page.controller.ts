@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 import { PageService } from './page.service';
 
 @Controller('page')
@@ -6,14 +6,21 @@ export class PageController {
     constructor(private readonly service: PageService) { }
 
     @Get()
-    getAllPages(): any {
-        return this.service.findAllPages();
+    @Render('page/list')
+    async getAllPages(): Promise<any> {
+        const result = await this.service.findAllPages();
+        return {
+            pages: result
+        }
     }
 
     @Get(':id')
-    getOnePage(@Param('id') id: string): any {
-        const result = this.service.findPageById(+id);
-        return result;
+    @Render('page/item')
+    async getOnePage(@Param('id') id: string): Promise<any> {
+        const result = await this.service.findPageById(+id);
+        return {
+            page: result
+        }
     }
 
 }
